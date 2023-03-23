@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Card" ALTER COLUMN "number" DROP DEFAULT,
+ALTER COLUMN "number" SET DATA TYPE TEXT;

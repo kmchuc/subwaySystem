@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "TrainLine" ADD COLUMN     "fare" INTEGER NOT NULL DEFAULT 0;

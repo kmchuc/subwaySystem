@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Station {
+  id           Int         @id @default(autoincrement())
+  name         String      @unique
+  EnterStation Ride[]      @relation("enterStation")
+  ExitStation  Ride[]      @relation("exitStation")
+  Ride         Ride[]
+  TrainLine    TrainLine[] @relation("StationToTrainLine")
+}
+
+model Train {
+  id        Int        @id @default(autoincrement())
+  name      String
+  trainLine TrainLine?
+}
+
+model TrainLine {
+  id       Int       @id @default(autoincrement())
+  trainId  Int       @unique
+  fare     Float     @default(0)
+  train    Train     @relation(fields: [trainId], references: [id])
+  stations Station[] @relation("StationToTrainLine")
+}
+
+model Card {
+  id     Int    @id @default(autoincrement())
+  number String @unique
+  amount Float  @default(0)
+  Ride   Ride[]
+}
+
+model Ride {
+  id             Int      @id @default(autoincrement())
+  cardId         Int
+  enterStationId Int
+  exitStationId  Int?
+  stationId      Int?
+  fare           Float
+  card           Card     @relation(fields: [cardId], references: [id])
+  enterStation   Station  @relation("enterStation", fields: [enterStationId], references: [id])
+  exitStation    Station? @relation("exitStation", fields: [exitStationId], references: [id])
+  Station        Station? @relation(fields: [stationId], references: [id])
+}
